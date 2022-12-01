@@ -1,8 +1,3 @@
-package day_one
-
-import readInput
-import verifyAndTime
-
 fun main() {
     val input = readInput(1)
 
