@@ -1,8 +1,13 @@
+package challenge
+
+import readInput
+import verifyAndMeasureDuration
+
 fun main() {
     val input = readInput(1)
 
-    verifyAndTime("Part One", 67658) { sumMostCaloriesCarried(input, 1) }
-    verifyAndTime("Part Two", 200158) { sumMostCaloriesCarried(input, 3) }
+    verifyAndMeasureDuration("Part One", 67658) { sumMostCaloriesCarried(input, 1) }
+    verifyAndMeasureDuration("Part Two", 200158) { sumMostCaloriesCarried(input, 3) }
 }
 
 private fun totalCaloriesPerElf(input: String) = input.split("\n\n").map {

@@ -3,7 +3,7 @@ import kotlin.system.measureNanoTime
 
 fun readInput(day: Int) = File(ClassLoader.getSystemResource("input/$day").file).readText()
 
-fun <T> verifyAndTime(taskName: String, expectedResult: T, functionUnderTest: () -> T) {
+fun <T> verifyAndMeasureDuration(taskName: String, expectedResult: T, functionUnderTest: () -> T) {
     println("\n-------------$taskName-------------")
 
     // Verify result
