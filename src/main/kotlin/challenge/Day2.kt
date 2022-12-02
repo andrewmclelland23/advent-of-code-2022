@@ -1,64 +1,69 @@
 package challenge
 
 import readInput
+import splitTransformAndFold
 import verifyAndMeasureDuration
 
 
 fun main() {
     val input = readInput(2)
 
-    verifyAndMeasureDuration("Part One", 11449) { input.parseToRpc<RPC_INCORRECT_RULES>().calculateScores() }
-    verifyAndMeasureDuration("Part Two", 13187) { input.parseToRpc<RPC_CORRECT_RULES>().calculateScores() }
+    verifyAndMeasureDuration("Part One", 11449) { input.calculateIncorrectScores() }
+    verifyAndMeasureDuration("Part Two", 13187) { input.calculateCorrectScores() }
 }
 
-private inline fun <reified T : Enum<T>> String.parseToRpc(): List<Pair<T, T>> =
-    split("\n").map { Pair(enumValueOf(it[0].toString()), enumValueOf(it[2].toString())) }
+private fun String.calculateIncorrectScores() =
+    splitTransformAndFold(delimiter = "\n", initial = 0,
+        transform = { Pair(RPC.valueFromName(it[0]), RPC.valueFromName(it[2])) },
+        fold = { acc, matchUp -> acc + resultTableOne[matchUp]!! }
+    )
 
-@JvmName("calculateScoresRPC_INCORRECT_RULESRPC_INCORRECT_RULES")
-private fun List<Pair<RPC_INCORRECT_RULES, RPC_INCORRECT_RULES>>.calculateScores() =
-    fold(0) { acc, (opponent, me) ->
-        acc + when {
-            opponent.score == me.score -> 3 + me.score
-            opponent.score == 1 && me.score == 3 -> 3
-            opponent.score == 2 && me.score == 1 -> 1
-            opponent.score == 3 && me.score == 2 -> 2
-            else -> 6 + me.score
-        }
+private fun String.calculateCorrectScores() =
+    splitTransformAndFold(delimiter = "\n", initial = 0,
+        transform = { Pair(RPC.valueFromName(it[0]), RESULT.valueFromName(it[2])) },
+        fold = { acc, input -> acc + resultTableTwo[input]!! }
+    )
+
+private val resultTableOne: Map<Pair<RPC, RPC>, Int> = mapOf(
+    Pair(RPC.ROCK, RPC.ROCK) to 4,
+    Pair(RPC.PAPER, RPC.PAPER) to 5,
+    Pair(RPC.SCISSORS, RPC.SCISSORS) to 6,
+    Pair(RPC.PAPER, RPC.ROCK) to 1,
+    Pair(RPC.SCISSORS, RPC.PAPER) to 2,
+    Pair(RPC.ROCK, RPC.SCISSORS) to 3,
+    Pair(RPC.SCISSORS, RPC.ROCK) to 7,
+    Pair(RPC.ROCK, RPC.PAPER) to 8,
+    Pair(RPC.PAPER, RPC.SCISSORS) to 9
+)
+
+val resultTableTwo: Map<Pair<RPC, RESULT>, Int> = mapOf(
+    Pair(RPC.ROCK, RESULT.LOSE) to 3,
+    Pair(RPC.ROCK, RESULT.DRAW) to 4,
+    Pair(RPC.ROCK, RESULT.WIN) to 8,
+    Pair(RPC.SCISSORS, RESULT.LOSE) to 2,
+    Pair(RPC.SCISSORS, RESULT.DRAW) to 6,
+    Pair(RPC.SCISSORS, RESULT.WIN) to 7,
+    Pair(RPC.PAPER, RESULT.LOSE) to 1,
+    Pair(RPC.PAPER, RESULT.DRAW) to 5,
+    Pair(RPC.PAPER, RESULT.WIN) to 9
+)
+
+enum class RPC(val names: String) {
+    ROCK("AX"),
+    PAPER("BY"),
+    SCISSORS("CZ");
+
+    companion object {
+        fun valueFromName(name: Char) = values().first { rpc -> rpc.names.contains(name) }
     }
-
-private fun List<Pair<RPC_CORRECT_RULES, RPC_CORRECT_RULES>>.calculateScores() =
-    fold(0) { acc, (opponent, me) ->
-        acc + when (me.score) {
-            3 -> opponent.score + 3
-            0 -> when (opponent.score) {
-                1 -> 3
-                2 -> 1
-                else -> 2
-            }
-
-            else -> when (opponent.score) {
-                1 -> 6 + 2
-                2 -> 6 + 3
-                else -> 6 + 1
-            }
-        }
-    }
-
-
-enum class RPC_INCORRECT_RULES(val score: Int) {
-    A(1),
-    B(2),
-    C(3),
-    X(1),
-    Y(2),
-    Z(3);
 }
 
-enum class RPC_CORRECT_RULES(val score: Int) {
-    A(1),
-    B(2),
-    C(3),
-    X(0),
-    Y(3),
-    Z(6);
+enum class RESULT(val code: String) {
+    WIN("Z"),
+    LOSE("X"),
+    DRAW("Y");
+
+    companion object {
+        fun valueFromName(code: Char) = RESULT.values().first { result -> result.code[0] == code }
+    }
 }

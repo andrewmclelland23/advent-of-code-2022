@@ -1,6 +1,7 @@
 package challenge
 
 import readInput
+import splitAndFold
 import verifyAndMeasureDuration
 
 fun main() {
@@ -11,7 +12,7 @@ fun main() {
 }
 
 private fun totalCaloriesPerElf(input: String) = input.split("\n\n").map {
-    it.split("\n").fold(0) { acc, calories ->
+    it.splitAndFold("\n", 0) { acc, calories ->
         acc + calories.toInt()
     }
 }
