@@ -9,7 +9,7 @@ import verifyAndMeasureDuration
 fun main() {
     val input = readInput(3)
 
-    verifyAndMeasureDuration("Part One", 7889) { input.sumIncorrectItems()}
+    verifyAndMeasureDuration("Part One", 7889) { input.sumIncorrectItems() }
     verifyAndMeasureDuration("Part Two", 2825) { input.findAndSumGroupBadges(3) }
 }
 
