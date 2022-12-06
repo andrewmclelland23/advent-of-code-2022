@@ -11,12 +11,8 @@ fun main() {
     verifyAndMeasureDuration("Part Two", 3452) { input.firstUniqueChars(14) }
 }
 
-fun String.firstUniqueChars(size: Int): Int {
-    var answer = -1
-    var i = -1
-    while(answer < 0) {
-        i++
-        if(this.drop(i).take(size).toSet().size == size) answer = i + size
-    }
-    return answer
-}
+tailrec fun String.firstUniqueChars(size: Int, startIndex: Int = 0): Int =
+    if(this.subSequence(startIndex, startIndex + size).toSet().size == size)
+        startIndex + size
+    else
+        firstUniqueChars(size, startIndex + 1)
