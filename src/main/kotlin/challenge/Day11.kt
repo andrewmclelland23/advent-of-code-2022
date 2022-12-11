@@ -11,7 +11,7 @@ fun main() {
     verifyAndMeasureDuration("Part One", 99840) {
         input.parseToMonkeys().performRounds(20, 3).sortedDescending().let { it[0] * it[1] }
     }
-    verifyAndMeasureDuration("Part Two", 74250) {
+    verifyAndMeasureDuration("Part Two", 20683044837) {
         input.parseToMonkeys().performRounds(10000).sortedDescending().let { it[0] * it[1] }
     }
 }
