@@ -13,3 +13,7 @@ tailrec fun findCommonChars(inputs: List<String>): List<Char> =
             findCommonChars(mutableListOf(matches.joinToString("")).plus(inputs.drop(2)))
         }
     }
+
+fun createGrid(rows: Int, columns: Int) = (0 until rows).map { y ->
+    (0 until columns).map { x -> Pair(x, y) }
+}

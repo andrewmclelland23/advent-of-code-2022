@@ -5,6 +5,7 @@ import challenge.Day10.draw
 import challenge.Day10.calculatePixelPositions
 import challenge.Day10.parse
 import challenge.Day10.sumSignalStrengthDuringCycles
+import createGrid
 import readInput
 import verifyAndMeasureDuration
 
@@ -36,7 +37,7 @@ object Day10 {
         forEach { crtRow ->
             crtRow.forEach { crtPos ->
                 if (crtPos.first.first == 0) drawing += "\n"
-                drawing += when(crtPos.second) {
+                drawing += when (crtPos.second) {
                     true -> "#"
                     false -> " "
                 }
@@ -58,17 +59,13 @@ object Day10 {
         }
     }
 
-    fun List<Int>.calculatePixelPositions(): List<List<Pair<Pair<Int, Int>, Boolean>>> {
-        val crtGrid = (0..5).map { y ->
-            (0..39).map { x -> Pair(x, y) }
-        }
-        return crtGrid.map { crtRow ->
+    fun List<Int>.calculatePixelPositions(): List<List<Pair<Pair<Int, Int>, Boolean>>> =
+        createGrid(6, 40).map { crtRow ->
             crtRow.map { crtPos ->
                 val reg = getOrNull(((crtPos.first + 1) + ((crtPos.second) * 40)) - 2) ?: 1
                 Pair(crtPos, (crtPos.first - 1 <= reg && reg <= crtPos.first + 1))
             }
         }
-    }
 
     fun List<Pair<Int, Int>>.calculateXAfterCycle(): List<Int> {
         var x = 1
